@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  backend:
+    container_name: django
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/project
+  
+  frontend:
+    container_name: vue
+    build: ./frontend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend:/project
+    depends_on:
+      - backend
