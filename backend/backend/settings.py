@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # Third
     'rest_framework',
     'corsheaders',
+    'django_filters',
     # Own
     'restaurant',
 ]
