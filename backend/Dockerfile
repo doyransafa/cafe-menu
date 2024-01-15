@@ -1,6 +1,5 @@
 FROM python:3.12-slim-bookworm
 
-RUN mkdir -p /project/backend
 WORKDIR /project
 
 ENV PYTHONUNBUFFERED 1
