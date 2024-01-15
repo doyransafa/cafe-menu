@@ -1,5 +1,5 @@
-from urllib import request
-from .models import Product, SubCategory, Category
+from itertools import product
+from .models import Product, SubCategory, Category, VariantItem, VariantGroup
 from rest_framework import serializers
 
 
@@ -26,10 +26,59 @@ class SubCategorySerializer(serializers.ModelSerializer):
     return None
 
 
+class VariantItemSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = VariantItem
+    fields = ['name', 'extra_price']
+
+
+class VariantGroupSerializer(serializers.ModelSerializer):
+  variant_items = VariantItemSerializer(many=True, required=False)
+  class Meta:
+    model = VariantGroup
+    fields = ['name', 'type', 'variant_items']
+
+
 class ProductSerializer(serializers.ModelSerializer):
   url = serializers.HyperlinkedIdentityField(view_name='product-detail', read_only=True)
-  sub_category = SubCategorySerializer(read_only=True)
+  sub_category = serializers.PrimaryKeyRelatedField(queryset=SubCategory.objects.all())
+  variant_groups = VariantGroupSerializer(many=True, required=False)
 
   class Meta:
     model = Product
-    fields = ['id', 'url', 'name', 'description', 'price', 'sub_category']
+    fields = ['id', 'url', 'name', 'description', 'price', 'sub_category', 'variant_groups']
+
+  def to_representation(self, instance):
+    representation = super().to_representation(instance)
+    representation['variant_groups'] = VariantGroupSerializer(instance.variant_groups.all(), many=True).data
+    return representation
+
+  def create(self, validated_data):
+    variant_groups_data = validated_data.pop('variant_groups', [])
+    product = Product.objects.create(**validated_data)
+
+    for variant_group_data in variant_groups_data:
+      variant_items_data = variant_group_data.pop('variant_items', [])
+      variant_group = VariantGroup.objects.create(product=product, **variant_group_data)
+
+      for variant_item_data in variant_items_data:
+        VariantItem.objects.create(variant_group=variant_group, **variant_item_data)
+    
+    return product
+  
+  def update(self, instance, validated_data):
+    variant_groups_data = validated_data.pop('variant_groups', [])
+    instance.name = validated_data.get('name', instance.name)
+    instance.description = validated_data.get('description', instance.description)
+    instance.price = validated_data.get('price', instance.price)
+    instance.sub_category = validated_data.get('sub_category', instance.sub_category)
+    instance.save()
+
+    for variant_group_data in variant_groups_data:
+      variant_items_data = variant_group_data.pop('variant_items', [])
+      variant_group, created = VariantGroup.objects.get_or_create(product=instance, **variant_group_data)
+
+      for variant_item_data in variant_items_data:
+        VariantItem.objects.update_or_create(variant_group=variant_group, **variant_item_data)
+
+    return instance
