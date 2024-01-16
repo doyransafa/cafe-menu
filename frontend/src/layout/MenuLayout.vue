@@ -1,11 +1,9 @@
 <script lang="ts">
 import HeaderMenu from "@/components/HeaderMenu.vue";
-import CategoryList from "@/components/List/CategoryList.vue";
 
 export default {
   components: {
     HeaderMenu,
-    CategoryList,
   },
 };
 </script>
@@ -16,7 +14,7 @@ export default {
     <div class="container margin-negative">
       <div class="row">
         <div class="col bg-white rounded-4 pt-3">
-          <h1>BigChefs Menu</h1>
+          <h1>BigCheff Menu</h1>
           <div>
             <div class="d-flex flex-wrap gap-2">
               <div>asdfsadf</div>
@@ -50,7 +48,7 @@ export default {
 
       <div class="row mt-4">
         <div class="col">
-          <CategoryList />
+          <RouterView />
         </div>
       </div>
     </div>

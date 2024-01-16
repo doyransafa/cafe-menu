@@ -1,11 +1,11 @@
 <template>
   <router-link
     class="link-underline"
-    :to="{ name: 'menu-item', params: { categoryName: categoryItem.id } }"
+    :to="{ name: 'menu-detail', params: { categoryName: categoryItem.id } }"
   >
     <div
       :style="{
-        backgroundImage: 'url(' + categoryItem.img + ')',
+        backgroundImage: 'url(' + categoryUrl + ')',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundColor: 'black',
@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-type Category = {
+export type Category = {
   id: number;
   name: string;
   img: string;
@@ -41,6 +41,12 @@ export default defineComponent({
       type: Object as () => Category,
       required: true,
     },
+  },
+  data() {
+    return {
+      categoryUrl:
+        "https://dyj6gt4964deb.cloudfront.net/images/9610964997582898.jpg",
+    };
   },
 });
 </script>

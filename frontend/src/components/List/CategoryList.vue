@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="row mb-3" v-for="category in categorys" :key="category.id">
+    <div class="row mb-3" v-for="category in subcategories" :key="category.id">
       <CategoryItem :categoryItem="category" />
     </div>
   </div>
 </template>
 <script lang="ts">
-import CategoryItem from "../CategoryItem.vue";
-import categorys from "@/mock/categorys";
+import SubCategoryDataService from "../../services/SubCategoryDataServices";
+import CategoryItem, { type Category } from "../CategoryItem.vue";
 
 export default {
   components: {
@@ -15,8 +15,18 @@ export default {
   },
   data() {
     return {
-      categorys,
+      subcategories: [] as Category[],
     };
+  },
+  methods: {
+    async retriveAllSubCategories() {
+      SubCategoryDataService.getAll().then((response) => {
+        this.subcategories = response.data;
+      });
+    },
+  },
+  mounted() {
+    this.retriveAllSubCategories();
   },
 };
 </script>

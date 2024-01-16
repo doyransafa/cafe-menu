@@ -15,9 +15,7 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     /* Linting */
     "strict": true,
@@ -26,9 +24,22 @@
     "noFallthroughCasesInSwitch": true
   },
   "types": [
-    "vue-sweetalert2",
-//    "@types/sweetalert2"
+    "vue-sweetalert2"
+    //    "@types/sweetalert2"
   ],
-  "include": ["src/*/.ts", "src/*/.d.ts", "src/*/.tsx", "src/*/.vue", "src/services/ConnectionsDataService.js"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "src/*/.ts",
+    "src/*/.d.ts",
+    "src/*/.tsx",
+    "src/*/.vue",
+    "src/services/ConnectionsDataService.js"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ]
 }
