@@ -13,7 +13,8 @@ router.register(r'orders', OrderViewSet, basename='order')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
+    path("__debug__/", include("debug_toolbar.urls")),
 ]
 
 urlpatterns += router.urls
