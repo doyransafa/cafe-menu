@@ -7,4 +7,3 @@ class SubCategoryFilter(filters.FilterSet):
   class Meta:
     model = Product
     fields = ['sub_category']
-

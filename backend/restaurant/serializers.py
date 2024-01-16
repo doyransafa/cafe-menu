@@ -1,4 +1,3 @@
-from itertools import product
 from .models import Product, SubCategory, Category, VariantItem, VariantGroup, Order, OrderItem, OrderItemVariant
 from rest_framework import serializers
 
