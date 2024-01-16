@@ -7,8 +7,8 @@
 </template>
 
 <script lang="ts">
-import ProductItem from "@/components/ProductItem.vue";
-import products from "@/mock/products";
+import ProductItem, { type Product } from "@/components/ProductItem.vue";
+import ProductsDataServices from "@/services/ProductsDataServices";
 
 export default {
   components: {
@@ -16,8 +16,19 @@ export default {
   },
   data() {
     return {
-      products,
+      products: [] as Product[],
     };
+  },
+  methods: {
+    async retriveSubProduct() {
+      const id = this.$route.params.categoryName as any;
+      ProductsDataServices.getSubCategory(id)
+        .then((response) => (this.products = response.data))
+        .catch((error) => console.log(error));
+    },
+  },
+  mounted() {
+    this.retriveSubProduct();
   },
 };
 </script>

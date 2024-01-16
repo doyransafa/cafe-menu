@@ -2,7 +2,7 @@
   <div>
     <div :class="{ 'opacity-25': !productList.availability }" class="card">
       <img
-        :src="productList.img"
+        src="https://dyj6gt4964deb.cloudfront.net/images/598818438392393.jpg"
         class="card-img-top"
         alt="menuListImage"
         style="height: 12rem; object-fit: cover"
@@ -33,7 +33,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-type Product = {
+export type Product = {
   id: number;
   img: string;
   name: string;
