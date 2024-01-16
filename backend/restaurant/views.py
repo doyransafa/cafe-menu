@@ -1,12 +1,10 @@
-from re import search
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Product, SubCategory, Category
-from .serializers import ProductSerializer, SubCategorySerializer, CategorySerializer
+from .models import Product, SubCategory, Category, Order
+from .serializers import ProductSerializer, SubCategorySerializer, CategorySerializer, OrderSerializer
 from .filters import SubCategoryFilter
 
-# Create your views here.
 
 class ProductViewSet(viewsets.ModelViewSet):
 
@@ -25,3 +23,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
   queryset = Category.objects.all().order_by('name')
   serializer_class = CategorySerializer
+
+class OrderViewSet(viewsets.ModelViewSet):
+
+  queryset = Order.objects.all().order_by('-created_at')
+  serializer_class = OrderSerializer

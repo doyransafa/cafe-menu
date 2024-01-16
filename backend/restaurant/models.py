@@ -1,3 +1,5 @@
+from math import prod
+from turtle import ondrag
 from django.db import models
 
 class Table(models.Model):
@@ -23,6 +25,7 @@ class Product(models.Model):
   name = models.CharField(max_length=100)
   description = models.CharField(max_length=1000)
   price = models.FloatField()
+  availability = models.BooleanField(default=True)
   sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
 
   def __str__(self) -> str:
@@ -43,4 +46,20 @@ class VariantItem(models.Model):
 
   def __str__(self) -> str:
     return f'Variant Item for {self.variant_group.name} - {self.name}'
+
+class Order(models.Model):
+  # table = models.ForeignKey(Table, on_delete=models.CASCADE)
+  total_price = models.FloatField()
+  created_at = models.DateTimeField(auto_now_add=True)
+  
+class OrderItem(models.Model):  
+  order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
+  product = models.ForeignKey(Product, on_delete=models.CASCADE)
+  quantity = models.PositiveSmallIntegerField(default=1)
+  total_price = models.FloatField()
+
+class OrderItemVariant(models.Model):
+  order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE)
+  variant_group = models.ForeignKey(VariantGroup, on_delete=models.CASCADE)
+  selected_variant = models.ForeignKey(VariantItem, on_delete=models.CASCADE)
 

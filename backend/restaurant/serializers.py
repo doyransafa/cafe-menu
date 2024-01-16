@@ -1,5 +1,5 @@
 from itertools import product
-from .models import Product, SubCategory, Category, VariantItem, VariantGroup
+from .models import Product, SubCategory, Category, VariantItem, VariantGroup, Order, OrderItem, OrderItemVariant
 from rest_framework import serializers
 
 
@@ -46,7 +46,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Product
-    fields = ['id', 'url', 'name', 'description', 'price', 'sub_category', 'variant_groups']
+    fields = ['id', 'url', 'name', 'description', 'price', 'availability', 'sub_category', 'variant_groups']
 
   def to_representation(self, instance):
     representation = super().to_representation(instance)
@@ -82,3 +82,45 @@ class ProductSerializer(serializers.ModelSerializer):
         VariantItem.objects.update_or_create(variant_group=variant_group, **variant_item_data)
 
     return instance
+
+class OrderItemVariantSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = OrderItemVariant
+    fields = ['variant_group', 'selected_variant']
+
+class OrderItemSerializer(serializers.ModelSerializer):
+  variants = OrderItemVariantSerializer(many=True, required=False)
+  
+  class Meta:
+    model = OrderItem
+    fields = ['product', 'quantity', 'total_price', 'variants']
+
+  def create(self, validated_data):
+    variants_data = validated_data.pop('variants', [])
+    order_item = OrderItem.objects.create(**validated_data)
+
+    for variant_data in variants_data:
+      OrderItemVariant.objects.create(order_item=order_item, **variant_data)
+    
+    return order_item
+
+class OrderSerializer(serializers.ModelSerializer):
+  items = OrderItemSerializer(many=True, required=False)
+
+  class Meta:
+    model = Order
+    fields = ['items', 'created_at']
+
+  def create(self, validated_data):
+
+    items_data = validated_data.pop('items', [])
+    order = Order.objects.create(**validated_data)
+
+    for item_data in items_data:
+      order_items_variants_data = item_data.pop('variants', [])
+      order_item = OrderItem.objects.create(order=order, **item_data)
+
+      for variant_data in order_items_variants_data:
+        OrderItemVariant.objects.create(order_item=order_item, **variant_data)
+
+    return order
