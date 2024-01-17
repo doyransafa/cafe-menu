@@ -73,8 +73,16 @@ class VariantItem(models.Model):
   def __str__(self) -> str:
     return f'Variant Item for {self.variant_group.name} - {self.name}'
 
+class Tab(models.Model):
+  table = models.ForeignKey(Table, on_delete=models.CASCADE)
+  total_price = models.FloatField()
+  is_active = models.BooleanField(default=False)
+  opened_at = models.DateTimeField(auto_now_add=True)
+  closed_at = models.DateTimeField(null=True, blank=True) 
+
 class Order(models.Model):
-  # table = models.ForeignKey(Table, on_delete=models.CASCADE)
+  tab = models.ForeignKey(Tab, on_delete=models.CASCADE, related_name='orders', null=True) ### remove null condition. ###
+  table = models.ForeignKey(Table, on_delete=models.CASCADE)
   total_price = models.FloatField()
   created_at = models.DateTimeField(auto_now_add=True)
   
@@ -88,4 +96,3 @@ class OrderItemVariant(models.Model):
   order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE, related_name='order_item_variants')
   variant_group = models.ForeignKey(VariantGroup, on_delete=models.CASCADE)
   selected_variant = models.ForeignKey(VariantItem, on_delete=models.CASCADE)
-

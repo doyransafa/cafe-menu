@@ -1,4 +1,4 @@
-from .models import Product, SubCategory, Category, VariantItem, VariantGroup, Order, OrderItem, OrderItemVariant
+from .models import Product, SubCategory, Category, VariantItem, VariantGroup, Order, OrderItem, OrderItemVariant, Tab
 from rest_framework import serializers
 
 
@@ -105,15 +105,25 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
   items = OrderItemSerializer(many=True, required=False)
+  tab_url = serializers.SerializerMethodField()
 
   class Meta:
     model = Order
-    fields = ['items', 'created_at', 'total_price']
+    fields = ['tab_url', 'items', 'created_at', 'total_price', 'table']
 
   def create(self, validated_data):
 
     items_data = validated_data.pop('items', [])
-    order = Order.objects.create(**validated_data)
+    table_id = validated_data.get('table')
+    existing_tab = Tab.objects.filter(table_id=table_id, is_active=True).first()
+    
+    if existing_tab:
+      order = Order.objects.create(tab=existing_tab, **validated_data)
+      existing_tab.total_price += order.total_price
+      existing_tab.save()
+    else:
+      new_tab = Tab.objects.create(table_id=table_id, total_price=validated_data.get('total_price'), is_active=True)
+      order = Order.objects.create(tab=new_tab, **validated_data)    
 
     for item_data in items_data:
       order_items_variants_data = item_data.pop('variants', [])
@@ -128,3 +138,17 @@ class OrderSerializer(serializers.ModelSerializer):
     representation = super().to_representation(instance)
     representation['order_items'] = OrderItemSerializer(instance.order_items.all(), many=True).data
     return representation
+  
+  def get_tab_url(self, obj):
+    request = self.context.get('request')
+    tab = obj.tab
+    if request and tab:
+      return request.build_absolute_uri(f'/tabs/{tab.id}')
+    return None
+  
+class TabSerializer(serializers.ModelSerializer):
+  orders = OrderSerializer(many=True, required=False)
+
+  class Meta:
+    model = Tab
+    fields = ['table', 'total_price', 'is_active', 'opened_at', 'closed_at', 'orders']
