@@ -4,8 +4,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 
-from .models import Product, SubCategory, Category, Order, Tab
-from .serializers import ProductSerializer, SubCategorySerializer, CategorySerializer, OrderSerializer, TabSerializer
+from .models import Product, SubCategory, Category, Order, Tab, Table
+from .serializers import ProductSerializer, SubCategorySerializer, CategorySerializer, OrderSerializer, TabSerializer, TableSerializer
 from .filters import SubCategoryFilter
 
 
@@ -40,3 +40,8 @@ class TabViewSet(viewsets.ModelViewSet):
 
   queryset = Tab.objects.all().order_by('is_active', 'opened_at')
   serializer_class = TabSerializer
+
+class TableViewSet(viewsets.ModelViewSet):
+
+  queryset = Table.objects.all().order_by('table_number')
+  serializer_class = TableSerializer

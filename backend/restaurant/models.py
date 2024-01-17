@@ -80,17 +80,27 @@ class Tab(models.Model):
   opened_at = models.DateTimeField(auto_now_add=True)
   closed_at = models.DateTimeField(null=True, blank=True) 
 
+  def __str__(self):
+    return f'Table {self.table.table_number}\'s tab'
+  
+
 class Order(models.Model):
   tab = models.ForeignKey(Tab, on_delete=models.CASCADE, related_name='orders', null=True) ### remove null condition. ###
   table = models.ForeignKey(Table, on_delete=models.CASCADE)
   total_price = models.FloatField()
   created_at = models.DateTimeField(auto_now_add=True)
   
+  def __str__(self):
+    return f'Table {self.table.table_number}\'s order for tab {self.tab.id}'
+  
 class OrderItem(models.Model):  
   order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
   product = models.ForeignKey(Product, on_delete=models.CASCADE)
   quantity = models.PositiveSmallIntegerField(default=1)
   total_price = models.FloatField()
+
+  def __str__(self):
+    return f'Order of {self.product.name} (qty: {self.quantity}) for {self.order.table}'
 
 class OrderItemVariant(models.Model):
   order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE, related_name='order_item_variants')

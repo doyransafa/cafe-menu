@@ -1,4 +1,4 @@
-from .models import Product, SubCategory, Category, VariantItem, VariantGroup, Order, OrderItem, OrderItemVariant, Tab
+from .models import Product, SubCategory, Category, VariantItem, VariantGroup, Order, OrderItem, OrderItemVariant, Tab, Table
 from rest_framework import serializers
 
 
@@ -152,3 +152,8 @@ class TabSerializer(serializers.ModelSerializer):
   class Meta:
     model = Tab
     fields = ['table', 'total_price', 'is_active', 'opened_at', 'closed_at', 'orders']
+
+class TableSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Table
+    fields = '__all__'

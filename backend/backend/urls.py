@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 
 from django.contrib import admin
 from django.urls import path, include
-from restaurant.views import ProductViewSet, SubCategoryViewSet, CategoryViewSet, OrderViewSet, TabViewSet
+from restaurant.views import ProductViewSet, SubCategoryViewSet, CategoryViewSet, OrderViewSet, TabViewSet, TableViewSet
 
 from rest_framework import routers
 
@@ -13,6 +13,7 @@ router.register(r'subcategories', SubCategoryViewSet, basename='subcategory')
 router.register(r'categories', CategoryViewSet, basename='category')
 router.register(r'orders', OrderViewSet, basename='order')
 router.register(r'tabs', TabViewSet, basename='tab')
+router.register(r'tables', TableViewSet, basename='table')
 # router.register(r'order_items', OrderItemViewSet, basename='order_item')
 # router.register(r'order_item_variants', OrderItemVariantViewSet, basename='order_item_variant')
 
