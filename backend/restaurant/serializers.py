@@ -28,14 +28,14 @@ class SubCategorySerializer(serializers.ModelSerializer):
 class VariantItemSerializer(serializers.ModelSerializer):
   class Meta:
     model = VariantItem
-    fields = ['name', 'extra_price']
+    fields = ['id', 'name', 'extra_price']
 
 
 class VariantGroupSerializer(serializers.ModelSerializer):
   variant_items = VariantItemSerializer(many=True, required=False)
   class Meta:
     model = VariantGroup
-    fields = ['name', 'type', 'variant_items']
+    fields = ['id', 'name', 'type', 'variant_items']
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -108,7 +108,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Order
-    fields = ['items', 'created_at']
+    fields = ['items', 'created_at', 'total_price']
 
   def create(self, validated_data):
 
@@ -123,3 +123,8 @@ class OrderSerializer(serializers.ModelSerializer):
         OrderItemVariant.objects.create(order_item=order_item, **variant_data)
 
     return order
+  
+  def to_representation(self, instance):
+    representation = super().to_representation(instance)
+    representation['order_items'] = OrderItemSerializer(instance.order_items.all(), many=True).data
+    return representation

@@ -3,10 +3,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.views.decorators.vary import vary_on_cookie
 
-from .models import Product, SubCategory, Category, Order
-from .serializers import ProductSerializer, SubCategorySerializer, CategorySerializer, OrderSerializer
+from .models import Product, SubCategory, Category, Order, OrderItem, OrderItemVariant
+from .serializers import ProductSerializer, SubCategorySerializer, CategorySerializer, OrderSerializer, OrderItemSerializer, OrderItemVariantSerializer
 from .filters import SubCategoryFilter
 
 
@@ -36,3 +35,13 @@ class OrderViewSet(viewsets.ModelViewSet):
 
   queryset = Order.objects.all().order_by('-created_at')
   serializer_class = OrderSerializer
+
+# class OrderItemViewSet(viewsets.ModelViewSet):
+
+#   queryset = OrderItem.objects.all().order_by('id')
+#   serializer_class = OrderItemSerializer
+
+# class OrderItemVariantViewSet(viewsets.ModelViewSet):
+
+#   queryset = OrderItemVariant.objects.all().order_by('id')
+#   serializer_class = OrderItemVariantSerializer

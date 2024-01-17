@@ -1,7 +1,35 @@
+import qrcode
+from io import BytesIO
+from PIL import Image
+import secrets
+
 from django.db import models
+from django.core.files import File
 
 class Table(models.Model):
   table_number = models.PositiveIntegerField(primary_key=True)
+  qr_code = models.ImageField(blank=True, upload_to='qr_codes')
+  token = models.CharField(max_length=255, unique=True, blank=True,)
+
+  def generate_qr_code(self):
+    if not self.qr_code:
+      qr_image = qrcode.make(f'http://www.localhost:8080/{self.table_number}/menu?token={self.token}')
+      qr_offset = Image.new('RGB', (370, 370), 'white')
+      qr_offset.paste(qr_image)
+      file_name = f'table-{self.table_number}-qr.png'
+      stream = BytesIO()
+      qr_offset.save(stream, 'PNG')
+      self.qr_code.save(file_name, File(stream), save=False)
+      qr_offset.close()
+
+  def generate_token(self):
+    if not self.token:
+      self.token = secrets.token_urlsafe(32)
+
+  def save(self, *args, **kwargs):
+    self.generate_qr_code()
+    self.generate_token()
+    super().save(*args, **kwargs)
 
   def __str__(self) -> str:
     return f'Table {self.table_number}'
@@ -57,7 +85,7 @@ class OrderItem(models.Model):
   total_price = models.FloatField()
 
 class OrderItemVariant(models.Model):
-  order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE)
+  order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE, related_name='order_item_variants')
   variant_group = models.ForeignKey(VariantGroup, on_delete=models.CASCADE)
   selected_variant = models.ForeignKey(VariantItem, on_delete=models.CASCADE)
 
