@@ -1,17 +1,13 @@
 <template>
   <div>
     <ul class="nav nav-tabs nav-fill">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Active</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+      <li v-for="category in categories" :key="category.id" class="nav-item">
+        <router-link
+          :to="{ name: 'categories', params: { categories: category.id } }"
+          class="nav-link"
+          aria-current="page"
+          >{{ category.name }}</router-link
+        >
       </li>
     </ul>
   </div>
@@ -19,16 +15,27 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import CategoryDataServices from "@/services/CategoryDataServices";
+
+type Category = {
+  id: number;
+  name: string;
+};
 
 export default defineComponent({
   data() {
-    return {};
+    return {
+      categories: [] as Category[],
+    };
   },
   methods: {
-    async retriveCategory() {},
+    async retriveCategories() {
+      const response = await CategoryDataServices.getAll();
+      this.categories = response.data;
+    },
   },
   mounted() {
-    this.retriveCategory();
+    this.retriveCategories();
   },
 });
 </script>
