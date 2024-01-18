@@ -42,7 +42,7 @@ class Category(models.Model):
   
 class SubCategory(models.Model):
   name = models.CharField(max_length=100)
-  main_category = models.ForeignKey(Category, on_delete=models.CASCADE)
+  main_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='sub_categories')
 
   def __str__(self) -> str:
     return f'SubCategory: {self.main_category.name} > {self.name}'
