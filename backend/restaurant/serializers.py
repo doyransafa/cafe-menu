@@ -23,7 +23,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Category
-    fields = ['url', 'name', 'sub_categories']
+    fields = ['id', 'url', 'name', 'sub_categories']
 
 
 class VariantItemSerializer(serializers.ModelSerializer):
