@@ -1,9 +1,11 @@
 <script lang="ts">
+import CategoryTabs from "@/components/CategoryTabs.vue";
 import HeaderMenu from "@/components/HeaderMenu.vue";
 
 export default {
   components: {
     HeaderMenu,
+    CategoryTabs,
   },
 };
 </script>
@@ -33,6 +35,13 @@ export default {
           </div>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col">
+          <CategoryTabs />
+        </div>
+      </div>
+
       <div class="row">
         <div class="col">
           <div class="form">
@@ -90,7 +99,8 @@ export default {
 .form-input {
   height: 55px;
   text-indent: 33px;
-  border-radius: 10px;
+  border-radius: 0 0px 10px 10px !important;
+  border-top: none !important;
 }
 
 .form-input:focus {
