@@ -23,7 +23,7 @@ const routes = [
   },
   {
     path: "/menu",
-    name: "",
+    name: "menu",
     component: MenuLayout,
     children: [
       {
@@ -31,11 +31,7 @@ const routes = [
         name: "categories",
         component: () => import("@/components/List/CategoryList.vue"),
       },
-      {
-        path: "",
-        name: "menu-list",
-        component: () => import("@/components/List/CategoryList.vue"),
-      },
+
       {
         path: ":categoryName",
         name: "menu-detail",

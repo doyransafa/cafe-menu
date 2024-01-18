@@ -1,11 +1,13 @@
 <script lang="ts">
 import CategoryTabs from "@/components/CategoryTabs.vue";
 import HeaderMenu from "@/components/HeaderMenu.vue";
+import MenuSearchBar from "@/components/MenuSearchBar.vue";
 
 export default {
   components: {
     HeaderMenu,
     CategoryTabs,
+    MenuSearchBar,
   },
 };
 </script>
@@ -44,14 +46,7 @@ export default {
 
       <div class="row">
         <div class="col">
-          <div class="form">
-            <i class="fa fa-search"></i>
-            <input
-              type="text"
-              class="form-control form-input"
-              placeholder="Search Menu..."
-            />
-          </div>
+          <MenuSearchBar />
         </div>
       </div>
 
@@ -67,44 +62,5 @@ export default {
 <style>
 .margin-negative {
   margin-top: -30px;
-}
-
-.form {
-  position: relative;
-}
-
-.form .fa-search {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  color: #9ca3af;
-}
-
-.form span {
-  position: absolute;
-  right: 17px;
-  top: 13px;
-  padding: 2px;
-  border-left: 1px solid #d1d5db;
-}
-
-.left-pan {
-  padding-left: 7px;
-}
-
-.left-pan i {
-  padding-left: 10px;
-}
-
-.form-input {
-  height: 55px;
-  text-indent: 33px;
-  border-radius: 0 0px 10px 10px !important;
-  border-top: none !important;
-}
-
-.form-input:focus {
-  box-shadow: none;
-  border: none;
 }
 </style>
