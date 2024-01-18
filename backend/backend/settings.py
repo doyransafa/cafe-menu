@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'debug_toolbar',
+    'drf_yasg',
     # Own
     'restaurant',
 ]

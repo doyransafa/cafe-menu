@@ -6,7 +6,7 @@ from django.views.decorators.cache import cache_page
 
 from .models import Product, SubCategory, Category, Order, Tab, Table
 from .serializers import ProductSerializer, SubCategorySerializer, CategorySerializer, OrderSerializer, TabSerializer, TableSerializer
-from .filters import SubCategoryFilter
+from .filters import SubCategoryFilter, ActiveTabFilter
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -39,6 +39,8 @@ class OrderViewSet(viewsets.ModelViewSet):
 class TabViewSet(viewsets.ModelViewSet):
 
   queryset = Tab.objects.all().order_by('is_active', 'opened_at')
+  filterset_class = ActiveTabFilter
+  filter_backends = [DjangoFilterBackend]
   serializer_class = TabSerializer
 
 class TableViewSet(viewsets.ModelViewSet):
