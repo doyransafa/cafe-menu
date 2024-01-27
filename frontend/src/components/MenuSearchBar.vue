@@ -1,3 +1,22 @@
+<script lang="ts">
+export default {
+  data() {
+    return {
+      searchTerm: "",
+    };
+  },
+  methods: {
+    search() {
+      if (this.searchTerm.trim() === "" || this.searchTerm.length < 2) {
+        this.$emit("clearSearch");
+      } else {
+        this.$emit("search", this.searchTerm);
+      }
+    },
+  },
+};
+</script>
+
 <template>
   <div>
     <div class="form">
@@ -6,6 +25,8 @@
         type="text"
         class="form-control form-input"
         placeholder="Search Menu..."
+        v-model="searchTerm"
+        @input="search"
       />
     </div>
   </div>

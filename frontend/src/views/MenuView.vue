@@ -1,11 +1,30 @@
 <script lang="ts">
 import HeaderMenu from "@/components/HeaderMenu.vue";
 import CategoryList from "@/components/List/CategoryList.vue";
+import SearchBar from "@/components/SearchBar.vue";
+import axios from "axios";
 
 export default {
   components: {
     HeaderMenu,
     CategoryList,
+    SearchBar,
+  },
+  data() {
+    return {
+      searchResults: [],
+    };
+  },
+  methods: {
+    async performSearch(searchTerm: any) {
+      try {
+        // Backend API'ye isteği gönder
+        const response = await axios.get(`/products/?search=${searchTerm}`);
+        this.searchResults = response.data;
+      } catch (error) {
+        console.error("Arama hatası:", error);
+      }
+    },
   },
 };
 </script>
@@ -16,7 +35,7 @@ export default {
     <div class="container margin-negative">
       <div class="row">
         <div class="col bg-white rounded-4 pt-3">
-          <h1>BigCheff Menu</h1>
+          <h1>BigCheff Menuasasdfasdf</h1>
           <div>
             <div class="d-flex flex-wrap gap-2">
               <div>asdfsadf</div>
@@ -45,11 +64,13 @@ export default {
               placeholder="Search Menu..."
             />
           </div>
+          <SearchBar @search="performSearch" />
         </div>
       </div>
 
       <div class="row mt-4">
         <div class="col">
+          {{ searchResults }}
           <CategoryList />
         </div>
       </div>

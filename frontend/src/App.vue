@@ -1,7 +1,6 @@
 <script lang="ts">
 import { RouterView } from "vue-router";
 
-
 export default {
   data() {
     return {
@@ -11,12 +10,16 @@ export default {
   components: {
     RouterView,
   },
- 
 };
 </script>
 
 <template>
-  <RouterView />
+  <div
+    class="bg-white"
+    style="max-width: 475px; margin-left: auto; margin-right: auto"
+  >
+    <RouterView />
+  </div>
 </template>
 
 <style scoped></style>
